@@ -1,41 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_to_do_list/data/database.dart';
 import 'package:flutter_to_do_list/until/dialog_box.dart';
 import 'package:flutter_to_do_list/until/todo_title.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
+  
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   // text controller
+
   final _controller = TextEditingController();
 
-  // list data todo
-  List itemToDo = [
-    ['ini tes 1', false],
-    ['ini tes 2', false],
-    ['ini tes 3', false],
-    ['ini tes 4', false],
-    ['ini tes 5', false],
-  ];
+  ToDoDatabase db = ToDoDatabase();
+
+  @override
+  void initState() {
+    db.loadData();
+
+    super.initState();
+  }
 
   void checkBoxChanged(bool? value, int index) 
   {
     setState(() {
-      itemToDo[index][1] = !itemToDo[index][1];
+      db.itemToDo[index][1] = !db.itemToDo[index][1];
     });
+    db.updateData();
   }
 
   void saveNewTask(){
     setState(() {
       // menambah data ke liat array di atas
-      itemToDo.add([_controller.text, false]);
+      db.itemToDo.add([_controller.text, false]);
     });
     Navigator.of(context).pop();
+    db.updateData();
   }
 
   void createNewTask() {
@@ -53,8 +57,9 @@ class _HomePageState extends State<HomePage> {
 
   void deleteTask(int index){
     setState(() {
-      itemToDo.removeAt(index);
+      db.itemToDo.removeAt(index);
     });
+    db.updateData();
   }
 
   @override
@@ -76,14 +81,14 @@ class _HomePageState extends State<HomePage> {
       ),
 
       body: ListView.builder(
-        itemCount: itemToDo.length,
+        itemCount: db.itemToDo.length,
 
         itemBuilder: (context, index) {
         
           return ToDoTitle(
             
-            taskName: itemToDo[index][0],
-            taskComplated: itemToDo[index][1],
+            taskName: db.itemToDo[index][0],
+            taskComplated: db.itemToDo[index][1],
             onChanged: (value) => checkBoxChanged(value, index),
             deleteFunction: (context) => deleteTask(index),
           
