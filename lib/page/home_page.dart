@@ -13,18 +13,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // text controller
-
   final _controller = TextEditingController();
 
+  // inisialisasi database 
   ToDoDatabase db = ToDoDatabase();
 
   @override
   void initState() {
+    // load data yang ada di local storage
     db.loadData();
 
     super.initState();
   }
 
+  // chackbox 
   void checkBoxChanged(bool? value, int index) 
   {
     setState(() {
@@ -33,6 +35,7 @@ class _HomePageState extends State<HomePage> {
     db.updateData();
   }
 
+  // save task ke local storage
   void saveNewTask(){
     setState(() {
       // menambah data ke liat array di atas
@@ -42,6 +45,7 @@ class _HomePageState extends State<HomePage> {
     db.updateData();
   }
 
+  // show modal
   void createNewTask() {
     showDialog(
       context: context,
@@ -55,6 +59,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // hapus task
   void deleteTask(int index){
     setState(() {
       db.itemToDo.removeAt(index);

@@ -3,6 +3,8 @@ import 'package:flutter_to_do_list/page/home_page.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
+  // initialisasi flutter hive
+  // kegunaan hive untuk local storage laravel dalam bentuk json
   await Hive.initFlutter();
 
   await Hive.openBox('MyBox');
